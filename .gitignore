@@ -1,0 +1,6 @@
+*.pyc
+*.db
+*.sqlite
+*.db-journal
+*.sqlite3
+testfile.py
