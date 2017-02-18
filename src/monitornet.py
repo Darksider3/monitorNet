@@ -36,8 +36,8 @@ def __ping(host):
 # else: 
 # 	print "nop"
 def isitup(host, defaultProt="https://", timeoutT=3):
-	if __ping(host)==False:
-		return False
+	# if __ping(host)==False:
+	# 	return False
 	
 	if "https://" not in host:
 		if "http://" not in host:
@@ -71,11 +71,13 @@ sqliteCleanOldEntrys(con, 1, month=True)
 
 
 #constants
-tillTimeout=5
 TESTLIST=["lasdf", "localbreak", "google.com", "google.de"]
 hostList=["google.de", "google.com", "http://darksider3.de/", "duckduckgo.com"]
 ListLength=3
-sleepTimer=10
+
+
+tillTimeout=5 # Timeout for HTTP/S
+sleepTimer=10 # Sleep for X seconds if it actually works to ping again
 
 #Variable content
 i=0
@@ -102,17 +104,12 @@ while False!=True:
 			insertstr="INSERT INTO down(url, timeoutTime) VALUES('%s', '%i')"%(hostList[i], tillTimeout)
 			cur.execute(insertstr)
 
-		if i == ListLength:
-			i=0
-		i+=1
-
 
 	with con:
 		cur=con.cursor()
 		insertstr="INSERT INTO down(url, up) VALUES('%s', 'True')"%hostList[i]
 		#print insertstr
 		cur.execute(insertstr)
-
 	"""
 	get it again every rotation
 	"""
@@ -126,16 +123,14 @@ while False!=True:
 	we need to exit properly, including close the database.
 	"""
 	try:
+		if i == ListLength:
+			i=0
+		else:
+			i+=1
 		time.sleep(sleepTimer)
 	except:
 		con.close()
 		sys.exit(1)
-	"""
-	check again
-	"""
-	if i == ListLength:
-		i=0
-	i+=1
 
 with con:
 	con.close()
