@@ -79,10 +79,10 @@ hostList=["google.de", "google.com", "http://darksider3.de/", "duckduckgo.com"]
 ListLength=3
 
 # Timer configs
-httpTimeout=1 # Timeout for HTTP/S
-pingTimeout=1 # Milliseconds
-sleepTimer=1 # Sleep for X seconds if it actually works to ping again
-httpExceptionSleep=1 # Seconds
+httpTimeout=3 # Timeout for HTTP/S
+pingTimeout=1000 # Milliseconds
+sleepTimer=5 # Sleep for X seconds if it actually works to ping again
+httpExceptionSleep=2 # Seconds
 
 
 #Variable content
