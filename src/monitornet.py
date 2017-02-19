@@ -26,27 +26,30 @@ def sqliteCleanDB(handle):
 		cur.execute("DROP TABLE IF EXISTS down")
 
 
-def __ping(host):
-	param="-n 1" if colors.OS == "NT" else "-c 1"
-	return os.system("ping %s %s >NUL"%(param, host))==0
-	
+def __ping(host, timeout=100):
+    timeoutparam=""
+    param="-n 1" if colors.OS == "NT" else "-c 1"
+    out=">NUL" if colors.OS == "NT" else "2>&1 /dev/null"
+    return os.system("ping %s %s >NUL"%(param, host))==0
+
 	
 # if __ping("fuckallthedayasdasdasdaskdlahsd-muuuh.com"):
 # 	print "yes"
 # else: 
 # 	print "nop"
-def isitup(host, defaultProt="https://", timeoutT=3):
-	# if __ping(host)==False:
+def isitup(host, defaultProt="https://", timeoutT=3, Ping=False, PingTimeout=100):
+	# if __ping(host, PingTimeout)==False:
 	# 	return False
-	
-	if "https://" not in host:
-		if "http://" not in host:
-			host=defaultProt+host
-	try:
-		r=requests.get(host, verify=True, timeout=timeoutT)
-		return True;
-	except requests.exceptions.RequestException as e:
-		return False;
+    if "https://" not in host:
+        if "http://" not in host:
+            host=defaultProt+host
+    try:
+        r=requests.get(host, verify=True, timeout=timeoutT)
+        return True
+    
+    except requests.exceptions.RequestException as e:
+        time.sleep(httpExceptionSleep)
+        return False;
 
 DATABASE = "down.db"
 try:
@@ -75,9 +78,12 @@ TESTLIST=["lasdf", "localbreak", "google.com", "google.de"]
 hostList=["google.de", "google.com", "http://darksider3.de/", "duckduckgo.com"]
 ListLength=3
 
-
-tillTimeout=5 # Timeout for HTTP/S
+# Timer configs
+httpTimeout=2 # Timeout for HTTP/S
+pingTimeout=3 # Milliseconds
 sleepTimer=10 # Sleep for X seconds if it actually works to ping again
+httpExceptionSleep=3 # Seconds
+
 
 #Variable content
 i=0
@@ -85,12 +91,12 @@ timestr=""
 
 
 while False!=True:
-	while isitup(hostList[i], timeoutT=tillTimeout)==False:
+	while isitup(hostList[i], timeoutT=httpTimeout)==False:
 		"""
 		Handle false positives
 		The if-clause if simply to don't go out of range of i. Checking on NULL or against an exception Object isn't good^^
 		"""
-		if isitup(hostList[i +1 if i!=ListLength else i-1], timeoutT=tillTimeout-2)==True:
+		if isitup(hostList[i +1 if i!=ListLength else i-1], timeoutT=httpTimeout)==True:
 			if i == ListLength:
 				i=0
 			else:
@@ -101,8 +107,12 @@ while False!=True:
 		# now put it into the db
 		with con:
 			cur=con.cursor()
-			insertstr="INSERT INTO down(url, timeoutTime) VALUES('%s', '%i')"%(hostList[i], tillTimeout)
+			insertstr="INSERT INTO down(url, timeoutTime) VALUES('%s', '%i')"%(hostList[i], httpTimeout)
 			cur.execute(insertstr)
+        if i==ListLength:
+            i=0
+        else:
+            i+=1
 
 
 	with con:
