@@ -34,9 +34,9 @@ def __ping(host, timeout=100):
 
 	
 # if __ping("fuckallthedayasdasdasdaskdlahsd-muuuh.com"):
-# 	print "yes"
+# 	print("yes")
 # else: 
-# 	print "nop"
+# 	print("nop")
 def isitup(host, defaultProt="https://", timeoutT=3, Ping=False, PingTimeout=100):
 	# if __ping(host, PingTimeout)==False:
 	# 	return False
@@ -79,10 +79,10 @@ hostList=["google.de", "google.com", "http://darksider3.de/", "duckduckgo.com"]
 ListLength=3
 
 # Timer configs
-httpTimeout=2 # Timeout for HTTP/S
-pingTimeout=3 # Milliseconds
-sleepTimer=10 # Sleep for X seconds if it actually works to ping again
-httpExceptionSleep=3 # Seconds
+httpTimeout=1 # Timeout for HTTP/S
+pingTimeout=1 # Milliseconds
+sleepTimer=1 # Sleep for X seconds if it actually works to ping again
+httpExceptionSleep=1 # Seconds
 
 
 #Variable content
@@ -96,12 +96,14 @@ while False!=True:
 		Handle false positives
 		The if-clause if simply to don't go out of range of i. Checking on NULL or against an exception Object isn't good^^
 		"""
+
 		if isitup(hostList[i +1 if i!=ListLength else i-1], timeoutT=httpTimeout)==True:
 			if i == ListLength:
 				i=0
 			else:
 				i+=1
 			break
+		
 		timestr=datetime.date.today().strftime("[%d.%m.%y]")+time.strftime("[%H:%M:%S] -> ") #get it again every rotation
 		colors.printer("[!!!] DOWN [!!!] URL: %s"%hostList[i], timestr, down=True)
 		# now put it into the db
@@ -109,16 +111,16 @@ while False!=True:
 			cur=con.cursor()
 			insertstr="INSERT INTO down(url, timeoutTime) VALUES('%s', '%i')"%(hostList[i], httpTimeout)
 			cur.execute(insertstr)
-        if i==ListLength:
-            i=0
-        else:
-            i+=1
+		if i==ListLength:
+			i=0
+		else:
+			i+=1
 
 
 	with con:
 		cur=con.cursor()
 		insertstr="INSERT INTO down(url, up) VALUES('%s', 'True')"%hostList[i]
-		#print insertstr
+		#print(insertstr)
 		cur.execute(insertstr)
 	"""
 	get it again every rotation

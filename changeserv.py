@@ -16,7 +16,7 @@ class reRun(FileSystemEventHandler):
         self.proc.kill()
         temp=subprocess.Popen(self.File, shell=False)
         self.proc=temp
-        print "Killed and Respawn"
+        print("Killed and Respawn")
         
 if __name__ == "__main__":
     temp= subprocess.Popen("python src/monitornet.py", shell=False)
