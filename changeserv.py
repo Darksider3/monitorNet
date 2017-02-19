@@ -1,11 +1,7 @@
 import sys
 import time
-import logging
-import os
-import signal
 import subprocess
 from watchdog.observers import Observer
-from watchdog.events import LoggingEventHandler
 from watchdog.events import FileSystemEventHandler
 
 class reRun(FileSystemEventHandler):

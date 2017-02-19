@@ -3,5 +3,6 @@
 *.sqlite
 *.db-journal
 *.sqlite3
+.idea*/
 NUL
 testfile.py
