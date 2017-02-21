@@ -40,12 +40,16 @@ def __ping(host, timeout=100):
 # else:
 # 	print("nop")
 def isitup(host, defaultProt="https://", timeoutT=3, Ping=False, PingTimeout=100):
+	if not __ping(host, PingTimeout):
+		time.sleep(pingSleep)
+		return False
 	if "https://" not in host:
 		if "http://" not in host:
 			host = defaultProt + host
 	try:
 		r = requests.get(host, verify=True, timeout=timeoutT)
 		return True
+	except requests.exceptions.RequestException:
 		time.sleep(httpExceptionSleep)
 		return False
 
@@ -71,6 +75,7 @@ sqlitecleanoldentrys(con, 1, month=True)
 
 # constants
 TESTLIST = ["lasdf", "localbreak", "google.com", "google.de"]
+hostList = ["google.de", "google.com", "darksider3.de", "duckduckgo.com"]
 ListLength = 3
 
 # Timer configs
