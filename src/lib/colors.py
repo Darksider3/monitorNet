@@ -19,73 +19,107 @@ OS HELPER FUNCTIONS
 """
 OS = "linux"
 if os_name == "nt":
-	OS = "NT"
-
-
-def get_csbi_attributes(handle):
-	import struct
-	csbi = ctypes.create_string_buffer(22)
-	res = ctypes.windll.kernel32.GetConsoleScreenBufferInfo(handle, csbi)
-	assert res
-	(bufx, bufy, curx, cury, wattr, left, top, right, bottom, maxx, maxy) = struct.unpack("hhhhHhhhhhh", csbi.raw)
-	return wattr
-
-
-# print helper(windows)
-def NT_downPrint(str, timeStr):
-	handle = ctypes.windll.kernel32.GetStdHandle(NT_STD_OUTPUT_HANDLE)
-	reset = get_csbi_attributes(handle)
-
-	# before we finish this, print the timeStr!
-	sys.stdout.write(timeStr)
-	ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_RED)
-	# print in red!
-	sys.stdout.write(str)
-	# reset color
-	ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
-	sys.stdout.write('\n')
-
-
-def NT_UpPrint(str, timeStr):
-	handle = ctypes.windll.kernel32.GetStdHandle(NT_STD_OUTPUT_HANDLE)
-	reset = get_csbi_attributes(handle)
-
-	# before we finish this, print the timeStr. In standard Color.
-	sys.stdout.write(timeStr)
-	ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_GREEN)
-	# print in green now ^.^
-	sys.stdout.write(str)
-	# reset color
-	ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
-	sys.stdout.write('\n')
+    OS = "NT"
 
 
 """
+# print helper(windows)
+
+def NT_downPrint(str, timestring):
+    handle = ctypes.windll.kernel32.GetStdHandle(NT_STD_OUTPUT_HANDLE)
+    reset = get_csbi_attributes(handle)
+
+    # before we finish this, print the timestring!
+    sys.stdout.write(timestring)
+    ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_RED)
+    # print in red!
+    sys.stdout.write(str)
+    # reset color
+    ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
+    sys.stdout.write('\n')
+
+
+def NT_UpPrint(str, timestring):
+    handle = ctypes.windll.kernel32.GetStdHandle(NT_STD_OUTPUT_HANDLE)
+    reset = get_csbi_attributes(handle)
+
+    # before we finish this, print the timestring. In standard Color.
+    sys.stdout.write(timestring)
+    ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_GREEN)
+    # print in green now ^.^
+    sys.stdout.write(str)
+    # reset color
+    ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
+    sys.stdout.write('\n')
+
+
 *nix ANSI Escape/Color Codes, POSIX right? Serious question.
 Anyway, bash can do it.
+
+
+def X_upPrint(string, timestring):
+    sys.stdout.write(timestring)
+    sys.stdout.write(X_GREEN + string + X_RESET + "\n")
+    sys.stdout.flush()
+
+
+def X_downPrint(string, timestring):
+    sys.stdout.write(timestring)
+    sys.stdout.write(X_RED + string + X_RESET + "\n")
+    sys.stdout.flush()
 """
+if OS == "NT":
+    def get_csbi_attributes(handle):
+        import struct
+        csbi = ctypes.create_string_buffer(22)
+        res = ctypes.windll.kernel32.GetConsoleScreenBufferInfo(handle, csbi)
+        assert res
+        (bufx, bufy, curx, cury, wattr, left, top, right, bottom, maxx, maxy) = struct.unpack("hhhhHhhhhhh", csbi.raw)
+        return wattr
 
 
-def X_UpPrint(str, timestr):
-	sys.stdout.write(timestr)
-	sys.stdout.write(X_GREEN + str + X_RESET + "\n")
-	sys.stdout.flush()
+    def upPrint(string, timestring):
+        handle = ctypes.windll.kernel32.GetStdHandle(NT_STD_OUTPUT_HANDLE)
+        reset = get_csbi_attributes(handle)
+
+        # before we finish this, print the timestring. In standard Color.
+        sys.stdout.write(timestring)
+        ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_GREEN)
+        # print in green now ^.^
+        sys.stdout.write(string)
+        # reset color
+        ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
+        sys.stdout.write('\n')
 
 
-def X_downPrint(str, timestr):
-	sys.stdout.write(timestr)
-	sys.stdout.write(X_RED + str + X_RESET + "\n")
-	sys.stdout.flush()
+    def downPrint(string, timestring):
+        handle = ctypes.windll.kernel32.GetStdHandle(NT_STD_OUTPUT_HANDLE)
+        reset = get_csbi_attributes(handle)
+
+        # before we finish this, print the timestring!
+        sys.stdout.write(timestring)
+        ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_RED)
+        # print in red!
+        sys.stdout.write(string)
+        # reset color
+        ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
+        sys.stdout.write('\n')
+
+else:
+    def upPrint(string, timestring):
+        sys.stdout.write(timestring)
+        sys.stdout.write(X_GREEN + string + X_RESET + "\n")
+        sys.stdout.flush()
 
 
-def printer(str, timestr, down=False):
-	if OS == "NT":
-		if down == False:
-			NT_UpPrint(str, timestr)
-		else:
-			NT_downPrint(str, timestr)
-	else:
-		if down == False:
-			X_UpPrint(str, timestr)
-		else:
-			X_downPrint(str, timestr)
+    def downPrint(string, timestring):
+        sys.stdout.write(timestring)
+        sys.stdout.write(X_RED + string + X_RESET + "\n")
+        sys.stdout.flush()
+
+
+def printer(string, timestring, down=False):
+    if down==False:
+        upPrint(string, timestring)
+    else:
+        downPrint(string, timestring)
