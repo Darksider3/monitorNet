@@ -1,7 +1,7 @@
 import requests
 import time
 import os
-import colors
+import lib.colors as colors
 
 
 class network:
