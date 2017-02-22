@@ -21,7 +21,6 @@ OS = "linux"
 if os_name == "nt":
     OS = "NT"
 
-
 """
 # print helper(windows)
 
@@ -119,7 +118,7 @@ else:
 
 
 def printer(string, timestring, down=False):
-    if down==False:
+    if down == False:
         upPrint(string, timestring)
     else:
         downPrint(string, timestring)
