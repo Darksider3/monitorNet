@@ -86,7 +86,7 @@ httpExceptionSleep = 2  # Seconds
 pingSleep = 2
 # Variable content
 i = 0
-timestr = ""
+timestring = ""
 
 while False != True:
     while not isitup(hostList[i], timeoutT=httpTimeout):
@@ -100,13 +100,13 @@ while False != True:
             else:
                 i += 1
             break
-        timestr = datetime.date.today().strftime("[%d.%m.%y]") + time.strftime("[%H:%M:%S] -> ")
-        colors.printer("[!!!] DOWN [!!!] URL: %s" % hostList[i], timestr, down=True)
+        timestring = datetime.date.today().strftime("[%d.%m.%y]") + time.strftime("[%H:%M:%S] -> ")
+        colors.printer("[!!!] DOWN [!!!] URL: %s" % hostList[i], timestring, down=True)
         # now put it into the db
         with con:
             cur = con.cursor()
-            insertstr = "INSERT INTO down(url, timeoutTime) VALUES('%s', '%i')" % (hostList[i], httpTimeout)
-            cur.execute(insertstr)
+            insertstring = "INSERT INTO down(url, timeoutTime) VALUES('%s', '%i')" % (hostList[i], httpTimeout)
+            cur.execute(insertstring)
         if i == ListLength:
             i = 0
         else:
@@ -114,15 +114,15 @@ while False != True:
 
     with con:
         cur = con.cursor()
-        insertstr = "INSERT INTO down(url, up) VALUES('%s', 'True')" % hostList[i]
-        # print(insertstr)
-        cur.execute(insertstr)
+        insertstring = "INSERT INTO down(url, up) VALUES('%s', 'True')" % hostList[i]
+        # print(insertstring)
+        cur.execute(insertstring)
 
     """
     get it again every rotation
     """
-    timestr = datetime.date.today().strftime("[%d.%m.%y]") + time.strftime("[%H:%M:%S] -> ")
-    colors.printer("[!] UP [!] URL: %s" % hostList[i], timestr, down=False)
+    timestring = datetime.date.today().strftime("[%d.%m.%y]") + time.strftime("[%H:%M:%S] -> ")
+    colors.printer("[!] UP [!] URL: %s" % hostList[i], timestring, down=False)
 
     """
     sleep specific amount of time to don't spam traffic(obvious, if you think about it, heh?)
@@ -142,4 +142,4 @@ while False != True:
 with con:
     con.close()
 
-colors.printer("Roger Roger guys, we're backs UP", timestr, down=False)
+colors.printer("Roger Roger guys, we're backs UP", timestring, down=False)
