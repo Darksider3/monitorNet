@@ -9,12 +9,13 @@ to high available services like google.*
 It uses Python 3, requests and SQLite3, as well as the internal OS representation of `ping`
 
 ```
-git clone %URL%
-cd %URL%
+git clone https://github.com/Darksider3/monitorNet
+cd monitorNet/src
 python ./monitornet.py
 ```
 
 It also has a Watchdog for changes in the project Python files(monitornet.py, colors.py). It uses watchdog:
 ```
+cd monitorNet
 python ./changeserv.py
 ```
