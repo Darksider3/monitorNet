@@ -13,7 +13,7 @@ class URLJob:
         pass
 
     def __cmp__(self, other):
-        if not isinstance(other, Job):
+        if not isinstance(other, URLJob):
             return None
         return cmp(self.priority, other.priority)
 
@@ -42,7 +42,7 @@ class PingJob(URLJob):
         else:
             self.ping=False
 
-q=queue.Queue()
+q=queue.PriorityQueue()
 q.put(PingJob("darksider3.de", 1, "Test1", timeout=1000))
 q.put(PingJob("google.de", 2, "googlede", timeout=1000))
 q.put(PingJob("google.com", 3, "googlecom", timeout=1000))
