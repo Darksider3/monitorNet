@@ -1,7 +1,7 @@
 import requests
 import time
 import datetime
-import subprocess  # PING and so one, heh?
+#import subprocess  # PING and so one, heh?
 # custom shit tho
 import lib.colors as colors
 
@@ -88,7 +88,7 @@ pingSleep = 2
 i = 0
 timestring = ""
 
-while False != True:
+while 1 != 0:
     while not isitup(hostList[i], timeoutT=httpTimeout):
         """
         Handle false positives
