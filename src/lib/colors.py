@@ -86,6 +86,7 @@ if OS == "NT":
         ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_GREEN)
         # print in green now ^.^
         sys.stdout.write(string)
+        sys.stdout.flush()
         # reset color
         ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
         sys.stdout.write('\n')
@@ -100,6 +101,7 @@ if OS == "NT":
         ctypes.windll.kernel32.SetConsoleTextAttribute(handle, NT_FOREGROUND_RED)
         # print in red!
         sys.stdout.write(string)
+        sys.stdout.flush()
         # reset color
         ctypes.windll.kernel32.SetConsoleTextAttribute(handle, reset)
         sys.stdout.write('\n')
