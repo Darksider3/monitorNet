@@ -4,5 +4,6 @@
 *.db-journal
 *.sqlite3
 .idea*/
+__pycache__
 NUL
 testfile.py
