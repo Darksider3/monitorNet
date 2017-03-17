@@ -15,6 +15,7 @@ class network:
         self.__checkHost__()
         self.score = 0
 
+
     def __checkHost__(self):
         if "https://" not in self.host:
             if "http://" not in self.host:
@@ -24,6 +25,8 @@ class network:
                 self.prot="http://"
         else:
             self.prot="https://"
+
+
     def ping(self):
         # strip the protocol from the string
         self.host=self.host.replace(self.prot, '')
@@ -36,6 +39,8 @@ class network:
         self.host=self.prot+self.host
 
         return status
+
+
     def httpsUp(self):
         try:
             requests.get(self.host, verify=True, timeout=self.httpTimeout)
@@ -44,8 +49,10 @@ class network:
             time.sleep(self.httpExceptionTimer)
             return False
 
+
     def __scoreAdd__(self, num):
         self.score += num
+
 
     def __scoreSub__(self, num):
         self.score -= num

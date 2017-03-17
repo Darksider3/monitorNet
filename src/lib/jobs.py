@@ -1,4 +1,4 @@
-import Queue as queue
+import queue
 from network import network
 import sqlite3 as lite
 
@@ -18,10 +18,15 @@ class URLJob:
     def __task__(self):
         pass
 
-    def __cmp__(self, other):
+    # def __cmp__(self, other):
+    #     if not isinstance(other, URLJob):
+    #         return None
+    #     return cmp(self.priority, other.priority)
+
+    def __lt__(self, other):
         if not isinstance(other, URLJob):
             return None
-        return cmp(self.priority, other.priority)
+        return self.priority < other.priority
 
 
 class HTTPSJob(URLJob):
@@ -75,5 +80,5 @@ print(test.ping)
 print("Testing queue")
 while not q.empty():
     next_job = q.get()
-    print 'Processing PingJob:', next_job.description
+    print('Processing PingJob:', next_job.description)
     print('Result: '+str(next_job.ping))
